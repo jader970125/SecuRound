@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|e:\\devsoft\\securound\\googlemapscoremvc\\googlemapscoremvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|solutionrelative:googlemapscoremvc\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|e:\\devsoft\\securound\\googlemapscoremvc\\googlemapscoremvc\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|solutionrelative:googlemapscoremvc\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|e:\\devsoft\\securound\\googlemapscoremvc\\googlemapscoremvc\\views\\map\\marcadores.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|solutionrelative:googlemapscoremvc\\views\\map\\marcadores.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|e:\\devsoft\\securound\\googlemapscoremvc\\googlemapscoremvc\\controllers\\mapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|solutionrelative:googlemapscoremvc\\controllers\\mapcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|e:\\devsoft\\securound\\googlemapscoremvc\\googlemapscoremvc\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FDFF0BA9-A8A3-46DD-BE4D-5703A7128AD3}|GoogleMapsCoreMVC\\GoogleMapsCoreMVC.csproj|solutionrelative:googlemapscoremvc\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Marcadores.cshtml",
+              "DocumentMoniker": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Views\\Map\\Marcadores.cshtml",
+              "RelativeDocumentMoniker": "GoogleMapsCoreMVC\\Views\\Map\\Marcadores.cshtml",
+              "ToolTip": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Views\\Map\\Marcadores.cshtml",
+              "RelativeToolTip": "GoogleMapsCoreMVC\\Views\\Map\\Marcadores.cshtml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACIAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-08T01:11:18.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "site.css",
+              "DocumentMoniker": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "GoogleMapsCoreMVC\\wwwroot\\css\\site.css",
+              "ToolTip": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "GoogleMapsCoreMVC\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-09-08T01:09:20.554Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "GoogleMapsCoreMVC\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "GoogleMapsCoreMVC\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-09-08T00:39:27.697Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MapController.cs",
+              "DocumentMoniker": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Controllers\\MapController.cs",
+              "RelativeDocumentMoniker": "GoogleMapsCoreMVC\\Controllers\\MapController.cs",
+              "ToolTip": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Controllers\\MapController.cs",
+              "RelativeToolTip": "GoogleMapsCoreMVC\\Controllers\\MapController.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAIAywBcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T00:44:54.503Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "GoogleMapsCoreMVC\\Controllers\\HomeController.cs",
+              "ToolTip": "E:\\DevSoft\\SecuRound\\GoogleMapsCoreMVC\\GoogleMapsCoreMVC\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "GoogleMapsCoreMVC\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-08T00:43:47.541Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
