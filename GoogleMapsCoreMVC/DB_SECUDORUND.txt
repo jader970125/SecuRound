@@ -1,0 +1,91 @@
+CREATE DATABASE SecuRound_DB
+
+USE securound_DB
+
+CREATE TABLE logins (
+ UserId  INT PRIMARY KEY  not null,
+ UsernameLogin VARCHAR(30) not null,
+ UserPassword VARCHAR(30) not null,
+ UserRol VARCHAR(30) not null
+ CHECK (UserRol in ('Despachador','Guarda','Administrador'))
+
+)
+ALTER TABLE logins
+ADD Email VARCHAR(100) NULL;
+
+INSERT INTO logins (UserId,UsernameLogin,UserPassword,UserRol,Email)
+VALUES 
+(1036670887,'jjvc','1234','Administrador','Johnjad.vargas@pascualbravo.edu.co'),
+(1036670888,'lgvc','1234','Guarda','correo2@gmail.com'),
+(1036670890,'glvj','1234','Guarda','correo4@gmail.com'),
+(1036670889,'jdvc','1234','Despachador','correo3@gmail.com');
+
+SELECT * from logins
+
+CREATE TABLE Agentes(
+ IdAgente INT PRIMARY KEY IDENTITY(1,1),
+ NameAgente VARCHAR(30) not null,
+ LastNameAgente VARCHAR(30) not null,
+ CargoAgente VARCHAR(30) not null,
+ UserId INT not null,
+ CONSTRAINT FK_Agentes_Logins FOREIGN KEY (UserId) REFERENCES logins (UserId) ON DELETE CASCADE
+)
+
+INSERT INTO agentes (NameAgente,LastNameAgente,CargoAgente,UserId)
+VALUES
+('Luis Guillermo','Vargas Cardona','Guarda 1',1036670888),
+('Guillermo Leon','Vargas Jimenez','Guarda 2',1036670890);
+
+create table Registros (
+IdReporte INT PRIMARY KEY IDENTITY(1,1),
+latitud DECIMAL (9,6) NOT NULL,
+longitud DECIMAL (9,6) NOT NULL,
+HoraReporte DATETIME NOT NULL,
+Userid INT NOT NULL,
+CONSTRAINT  FK_Registros_Logins FOREIGN KEY (UserId) REFERENCES logins (UserId) ON DELETE CASCADE 
+)
+
+DECLARE @StartTime DATETIME = CAST(GETDATE() AS DATE); -- Solo fecha de hoy, hora 00:00
+DECLARE @Counter INT = 0;
+
+WHILE @Counter < 10
+BEGIN
+    -- Usuario 1036670888
+    INSERT INTO Registros (Latitud, Longitud, HoraReporte, UserId)
+    VALUES (
+        6.20 + (RAND() * 0.10),       -- Latitud aleatoria entre 6.20 y 6.30
+        -75.60 + (RAND() * 0.10),     -- Longitud aleatoria entre -75.60 y -75.50
+        DATEADD(MINUTE, @Counter * 10, @StartTime), -- cada 10 minutos
+        1036670888
+    );
+
+    -- Usuario 1036670890
+    INSERT INTO Registros (Latitud, Longitud, HoraReporte, UserId)
+    VALUES (
+        6.20 + (RAND() * 0.10),
+        -75.60 + (RAND() * 0.10),
+        DATEADD(MINUTE, @Counter * 10, @StartTime),
+        1036670890
+    );
+
+    SET @Counter = @Counter + 1;
+END;
+
+SELECT * 
+FROM Registros
+ORDER BY HoraReporte, UserId;
+
+SELECT 
+    r.IdReporte,
+    r.Latitud,
+    r.Longitud,
+    r.HoraReporte,
+    l.UserId,
+    a.NameAgente,
+    a.LastNameAgente,
+    l.Email,
+    l.UserRol
+FROM Registros r
+INNER JOIN logins l ON r.UserId = l.UserId
+LEFT JOIN Agentes a ON l.UserId = a.UserId
+ORDER BY r.HoraReporte, l.UserId;

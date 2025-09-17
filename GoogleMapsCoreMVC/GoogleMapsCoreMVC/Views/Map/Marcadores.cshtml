@@ -1,55 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "Mapa con Marcadores y Menú Lateral";
+    ViewData["Title"] = "Mapa con Marcadores (Base de Datos)";
 }
 
-<h2 style="color: white;">SECUROUND</h2color>
+<h2 style="color:white;">SECUROUND</h2>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<style>
-    #container {
-        display: flex;
-        gap: 10px;
-    }
-
-    #menu {
-        width: 250px;
-        padding: 10px;
-        background: #f8f9fa;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-    }
-
-    #map {
-        flex: 1;
-        height: 500px;
-        border-radius: 12px;
-    }
-</style>
-
-<div id="container">
+<div id="container" style="display:flex;gap:10px;">
     <!-- Menú lateral -->
-    <div id="menu" style="background-color: #000000">
-        <h4>Seleccionar marcadores</h4>
-        <label><input type="checkbox" class="marker-toggle" value="centro" checked> Centro de Medellín</label><br>
-        <label><input type="checkbox" class="marker-toggle" value="estadio" checked> Estadio Atanasio</label><br>
-        <label><input type="checkbox" class="marker-toggle" value="pueblito" checked> Pueblito Paisa</label>
+    <div id="menu" style="width:250px;padding:10px;background-color:#000;color:white;border-radius:8px;">
+        <h4>Filtrar registros</h4>
+        <label><input type="checkbox" class="role-filter" value="Guarda" checked> Guardas</label><br>
+        <label><input type="checkbox" class="role-filter" value="Despachador" checked> Despachadores</label><br>
+        <label><input type="checkbox" class="role-filter" value="Administrador" checked> Administradores</label>
     </div>
 
     <!-- Mapa -->
-    <div id="map"></div>
+    <div id="map" style="flex:1;height:500px;border-radius:12px;"></div>
 </div>
 
 <script>
-    var map = L.map('map').setView([6.2442, -75.5812], 12);
+    var map = L.map('map').setView([6.2442, -75.5812], 13);
 
-    // Capa base de OpenStreetMap
+    // Capa base
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
+        attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Ícono personalizado
+    // Icono personalizado
     var customIcon = L.icon({
         iconUrl: '/icons/marker.png',
         iconSize: [40, 40],
@@ -57,25 +36,35 @@
         popupAnchor: [0, -40]
     });
 
-    // Marcadores
-    var marcadores = {
-        centro: L.marker([6.2518, -75.5636], { icon: customIcon }).bindPopup("<b>Centro de Medellín</b>"),
-        estadio: L.marker([6.2676, -75.5696], { icon: customIcon }).bindPopup("<b>Estadio Atanasio</b>"),
-        pueblito: L.marker([6.2308, -75.5790], { icon: customIcon }).bindPopup("<b>Pueblito Paisa</b>")
-    };
+    var marcadores = [];
 
-    // Mostrar todos los marcadores al inicio
-    Object.values(marcadores).forEach(m => m.addTo(map));
+    // ✅ Cargar registros desde el backend
+    async function cargarRegistros() {
+        const response = await fetch('/Map/GetRegistros');
+        const data = await response.json();
 
-    // Escuchar cambios en los checkboxes
-    document.querySelectorAll(".marker-toggle").forEach(cb => {
-        cb.addEventListener("change", function () {
-            var marker = marcadores[this.value];
-            if (this.checked) {
+        // Limpia marcadores previos
+        marcadores.forEach(m => map.removeLayer(m));
+        marcadores = [];
+
+        // Filtra según checkboxes
+        const rolesSeleccionados = Array.from(document.querySelectorAll('.role-filter:checked')).map(cb => cb.value);
+
+        data.forEach(r => {
+            if (rolesSeleccionados.includes(r.userRol)) {
+                var marker = L.marker([r.latitud, r.longitud], { icon: customIcon })
+                    .bindPopup(`<b>${r.agente}</b><br>Rol: ${r.userRol}<br>Hora: ${new Date(r.hora).toLocaleString()}`);
                 marker.addTo(map);
-            } else {
-                map.removeLayer(marker);
+                marcadores.push(marker);
             }
         });
+    }
+
+    // ✅ Escuchar cambios de checkboxes
+    document.querySelectorAll(".role-filter").forEach(cb => {
+        cb.addEventListener("change", cargarRegistros);
     });
+
+    // ✅ Primera carga
+    cargarRegistros();
 </script>
