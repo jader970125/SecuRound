@@ -1,11 +1,15 @@
-﻿using GoogleMapsCoreMVC.Models;
+﻿using GoogleMapsCoreMVC.Filters;
+using GoogleMapsCoreMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoogleMapsCoreMVC.Controllers
 {
+    [AuthFilter] // 🔒 Esto exige sesión para acceder
     public class MapController : Controller
     {
+        
+
         private readonly ApplicationDbContext _context;
 
         public MapController(ApplicationDbContext context)

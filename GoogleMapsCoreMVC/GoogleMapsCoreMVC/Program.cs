@@ -3,36 +3,39 @@ using GoogleMapsCoreMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// 🔹 Conexión a la BD
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
+// 🔹 Habilitar controladores con vistas
 builder.Services.AddControllersWithViews();
+
+// 🔹 Registrar sesiones (antes del Build)
+builder.Services.AddSession();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 🔹 Configurar el pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+// 🔹 Activar sesiones (DEBE ir ANTES de UseAuthorization)
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
-
-
-

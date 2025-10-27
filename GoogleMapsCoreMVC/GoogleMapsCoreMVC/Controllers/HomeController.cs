@@ -1,11 +1,15 @@
-using System.Diagnostics;
+﻿using GoogleMapsCoreMVC.Filters;
 using GoogleMapsCoreMVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace GoogleMapsCoreMVC.Controllers
 {
+    [AuthFilter] // 🔒 Esto exige sesión para acceder
     public class HomeController : Controller
     {
+      
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
