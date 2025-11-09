@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Mapa con Marcadores (Base de Datos)";
+    ViewData["Title"] = "Mapa con Reportes de Agentes";
 }
 
 <h2 style="color:white;">SECUROUND</h2>
@@ -7,28 +7,68 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<div id="container" style="display:flex;gap:10px;">
-    <!-- Menú lateral -->
-    <div id="menu" style="width:250px;padding:10px;background-color:#000;color:white;border-radius:8px;">
-        <h4>Filtrar registros</h4>
-        <label><input type="checkbox" class="role-filter" value="Guarda" checked> Guardas</label><br>
-        <label><input type="checkbox" class="role-filter" value="Despachador" checked> Despachadores</label><br>
-        <label><input type="checkbox" class="role-filter" value="Administrador" checked> Administradores</label>
+<div id="container" style="display:flex;flex-direction:column;gap:10px;">
+    <!-- Contenedor principal -->
+    <div style="display:flex;gap:10px;">
+        <!-- Panel lateral -->
+        <div id="menu" style="width:250px;padding:10px;background-color:#000;color:white;border-radius:8px;">
+            <h4>Filtrar registros</h4>
+
+            <!-- Filtro por rol -->
+            <label><input type="checkbox" class="role-filter" value="Guarda" checked> Guardas</label><br>
+            <label><input type="checkbox" class="role-filter" value="Despachador" checked> Despachadores</label><br>
+            <label><input type="checkbox" class="role-filter" value="Administrador" checked> Administradores</label>
+            <hr />
+
+            <!-- Filtro por agente -->
+            <label for="userFilter">Filtrar por agente:</label><br>
+            <select id="userFilter" style="width:100%;padding:5px;border-radius:5px;">
+                <option value="">Todos</option>
+            </select>
+            <hr />
+
+            <!-- Selector de tipo de datos -->
+            <label for="tipoDatos">Tipo de datos:</label><br>
+            <select id="tipoDatos" style="width:100%;padding:5px;border-radius:5px;">
+                <option value="ultimos">Últimos registros</option>
+                <option value="todos">Todos los registros</option>
+            </select>
+        </div>
+
+        <!-- Mapa -->
+        <div id="map" style="flex:1;height:500px;border-radius:12px;"></div>
     </div>
 
-    <!-- Mapa -->
-    <div id="map" style="flex:1;height:500px;border-radius:12px;"></div>
+    <!-- Tabla inferior -->
+    <div style="margin-top:20px;background-color:white;border-radius:10px;padding:15px;">
+        <h4>Últimos reportes</h4>
+        <table id="tablaRegistros" class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        <input type="checkbox" id="selectAll" checked>
+                    </th>
+                    <th>Agente</th>
+                    <th>Rol</th>
+                    <th>Email</th>
+                    <th>Hora del reporte</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+
+    </div>
 </div>
 
 <script>
     var map = L.map('map').setView([6.2442, -75.5812], 13);
 
-    // Capa base
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Icono personalizado
     var customIcon = L.icon({
         iconUrl: '/icons/marker.png',
         iconSize: [40, 40],
@@ -36,35 +76,99 @@
         popupAnchor: [0, -40]
     });
 
-    var marcadores = [];
+    var marcadores = {};
 
-    // ✅ Cargar registros desde el backend
     async function cargarRegistros() {
-        const response = await fetch('/Map/GetRegistros');
+        const tipo = document.querySelector("#tipoDatos")?.value || "ultimos";
+        const endpoint = tipo === "todos" ? "/Map/GetRegistros" : "/Map/GetUltimosRegistros";
+        const response = await fetch(endpoint);
         const data = await response.json();
 
-        // Limpia marcadores previos
-        marcadores.forEach(m => map.removeLayer(m));
-        marcadores = [];
+        // Limpiar mapa y tabla
+        Object.values(marcadores).forEach(m => map.removeLayer(m));
+        marcadores = {};
+        document.querySelector("#tablaRegistros tbody").innerHTML = "";
 
-        // Filtra según checkboxes
+        // Filtros seleccionados
         const rolesSeleccionados = Array.from(document.querySelectorAll('.role-filter:checked')).map(cb => cb.value);
+        const userSeleccionado = document.querySelector("#userFilter").value;
 
-        data.forEach(r => {
-            if (rolesSeleccionados.includes(r.userRol)) {
-                var marker = L.marker([r.latitud, r.longitud], { icon: customIcon })
-                    .bindPopup(`<b>${r.agente}</b><br>Rol: ${r.userRol}<br>Hora: ${new Date(r.hora).toLocaleString()}`);
-                marker.addTo(map);
-                marcadores.push(marker);
-            }
+        // Llenar lista de agentes si está vacía
+        if (document.querySelector("#userFilter").options.length <= 1) {
+            const agentesUnicos = [...new Map(data.map(r => [r.userId, r.agente])).entries()];
+            agentesUnicos.forEach(([id, nombre]) => {
+                const opt = document.createElement("option");
+                opt.value = id;
+                opt.textContent = nombre;
+                document.querySelector("#userFilter").appendChild(opt);
+            });
+        }
+
+        // Filtrar datos por rol y usuario
+        const filtrados = data.filter(r =>
+            rolesSeleccionados.includes(r.userRol) &&
+            (userSeleccionado === "" || r.userId == userSeleccionado)
+        );
+
+        // Cargar registros
+        filtrados.forEach(r => {
+            var marker = L.marker([r.latitud, r.longitud], { icon: customIcon })
+                .bindPopup(`<b>${r.agente}</b><br>Rol: ${r.userRol}<br>Hora: ${new Date(r.hora).toLocaleString()}`);
+            marcadores[r.id] = marker;
+            marker.addTo(map);
+
+            const fila = `
+                <tr>
+                    <td><input type="checkbox" class="fila-check" data-id="${r.id}" checked></td>
+                    <td>${r.agente}</td>
+                    <td>${r.userRol}</td>
+                    <td>${r.email}</td>
+                    <td>${new Date(r.hora).toLocaleString()}</td>
+                </tr>`;
+            document.querySelector("#tablaRegistros tbody").insertAdjacentHTML("beforeend", fila);
+        });
+
+        // Escuchar eventos de los checkboxes individuales
+        document.querySelectorAll(".fila-check").forEach(chk => {
+            chk.addEventListener("change", function () {
+                const id = this.getAttribute("data-id");
+                if (this.checked) {
+                    marcadores[id].addTo(map);
+                } else {
+                    map.removeLayer(marcadores[id]);
+                }
+
+                // 🔄 Sincronizar el "select all" con el estado de los checks
+                const todos = document.querySelectorAll(".fila-check").length;
+                const seleccionados = document.querySelectorAll(".fila-check:checked").length;
+                document.querySelector("#selectAll").checked = (todos === seleccionados);
+            });
         });
     }
 
-    // ✅ Escuchar cambios de checkboxes
-    document.querySelectorAll(".role-filter").forEach(cb => {
-        cb.addEventListener("change", cargarRegistros);
+    // 🎚️ Checkbox maestro (Seleccionar / Deseleccionar todos)
+    document.addEventListener("change", e => {
+        if (e.target.id === "selectAll") {
+            const checkAll = e.target.checked;
+            document.querySelectorAll(".fila-check").forEach(chk => {
+                chk.checked = checkAll;
+                const id = chk.getAttribute("data-id");
+                if (checkAll) {
+                    marcadores[id].addTo(map);
+                } else {
+                    map.removeLayer(marcadores[id]);
+                }
+            });
+        }
     });
 
-    // ✅ Primera carga
+    // Escuchar cambios de filtros
+    document.querySelectorAll(".role-filter").forEach(cb => cb.addEventListener("change", cargarRegistros));
+    document.querySelector("#userFilter").addEventListener("change", cargarRegistros);
+    document.querySelector("#tipoDatos")?.addEventListener("change", cargarRegistros);
+
+    // Carga inicial
     cargarRegistros();
+    setInterval(cargarRegistros, 30000);
 </script>
+

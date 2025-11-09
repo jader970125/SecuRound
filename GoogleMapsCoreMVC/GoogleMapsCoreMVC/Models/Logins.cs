@@ -24,8 +24,8 @@ namespace GoogleMapsCoreMVC.Models
         [Display(Name = "Correo electrónico")]
         public string Email { get; set; }
 
-        // Relaciones con otras tablas (opcional)
+        // Relaciones con otras tablas
         public ICollection<Agente> Agentes { get; set; }
-        public ICollection<Registros> Registros { get; set; }
+        public ICollection<Registro> Registros { get; set; } // ✅ corregido (singular)
     }
 }

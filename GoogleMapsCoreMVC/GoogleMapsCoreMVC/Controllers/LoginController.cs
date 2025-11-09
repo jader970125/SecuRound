@@ -34,7 +34,7 @@ namespace GoogleMapsCoreMVC.Controllers
                 return View();
             }
 
-            var user = await _context.Logins
+            var user = await _context.Login
                 .FirstOrDefaultAsync(u => u.UsernameLogin == username && u.UserPassword == password);
 
             if (user == null)

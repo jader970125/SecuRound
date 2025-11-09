@@ -1,16 +1,24 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GoogleMapsCoreMVC.Models
 {
-    public class RegistroDto
+    public class Registros
     {
+        [Key]
         public int IdReporte { get; set; }
-        public double Lat { get; set; }
-        public double Lng { get; set; }
+
+        [Column(TypeName = "decimal(9,6)")]
+        public decimal Latitud { get; set; }
+
+        [Column(TypeName = "decimal(9,6)")]
+        public decimal Longitud { get; set; }
+
         public DateTime HoraReporte { get; set; }
+
+        [ForeignKey("User")]
         public int UserId { get; set; }
-        public string NombreAgente { get; set; } // nombre completo o username
-        public string Email { get; set; }
-        public string UserRol { get; set; }
+
+        public Login User { get; set; }
     }
 }

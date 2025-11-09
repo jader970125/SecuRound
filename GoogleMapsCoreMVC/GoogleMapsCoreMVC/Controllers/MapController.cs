@@ -5,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GoogleMapsCoreMVC.Controllers
 {
-    [AuthFilter] // 🔒 Esto exige sesión para acceder
+    [AuthFilter]
     public class MapController : Controller
     {
-        
-
         private readonly ApplicationDbContext _context;
 
         public MapController(ApplicationDbContext context)
@@ -17,31 +15,66 @@ namespace GoogleMapsCoreMVC.Controllers
             _context = context;
         }
 
-        // ✅ Vista principal de marcadores (tu mapa)
+        // Vista del mapa
         public IActionResult Marcadores()
         {
-            return View(); // Buscará Views/Map/Marcadores.cshtml
+            return View();
         }
 
-        // ✅ Endpoint que devuelve registros como JSON
+        // ✅ Endpoint para obtener SOLO el último registro por agente
+        [HttpGet]
+        public async Task<IActionResult> GetUltimosRegistros()
+        {
+            // 1️⃣ Traer registros con login asociado
+            var registros = await _context.Registro
+                .Include(r => r.Login)
+                .OrderByDescending(r => r.HoraReporte)
+                .ToListAsync();
+
+            // 2️⃣ Tomar el último por usuario
+            var ultimos = registros
+                .GroupBy(r => r.Login.UserId)
+                .Select(g => g.First())
+                .ToList();
+
+            // 3️⃣ Armar respuesta JSON
+            var resultado = ultimos.Select(r => new
+            {
+                id = r.IdReporte,
+                latitud = r.Latitud,
+                longitud = r.Longitud,
+                hora = r.HoraReporte,
+                userId = r.Login.UserId,
+                userRol = r.Login.UserRol,
+                email = r.Login.Email,
+                agente = _context.Agentes
+                    .Where(a => a.UserId == r.Login.UserId)
+                    .Select(a => a.NameAgente + " " + a.LastNameAgente)
+                    .FirstOrDefault() ?? "Sin nombre"
+            }).ToList();
+
+            return Json(resultado);
+        }
+
+        // ✅ Endpoint para obtener TODOS los registros
         [HttpGet]
         public async Task<IActionResult> GetRegistros()
         {
-            var data = await _context.Registros
-                .Include(r => r.User) // Incluye usuario
-                .ThenInclude(u => u.Agentes) // Incluye agentes
+            var data = await _context.Registro
+                .Include(r => r.Login)
                 .Select(r => new
                 {
                     id = r.IdReporte,
                     latitud = r.Latitud,
                     longitud = r.Longitud,
                     hora = r.HoraReporte,
-                    userId = r.User.UserId,
-                    userRol = r.User.UserRol,
-                    email = r.User.Email,
-                    agente = r.User.Agentes.FirstOrDefault() != null
-                        ? r.User.Agentes.FirstOrDefault().NameAgente + " " + r.User.Agentes.FirstOrDefault().LastNameAgente
-                        : "Sin nombre"
+                    userId = r.Login.UserId,
+                    userRol = r.Login.UserRol,
+                    email = r.Login.Email,
+                    agente = _context.Agentes
+                        .Where(a => a.UserId == r.Login.UserId)
+                        .Select(a => a.NameAgente + " " + a.LastNameAgente)
+                        .FirstOrDefault() ?? "Sin nombre"
                 })
                 .ToListAsync();
 

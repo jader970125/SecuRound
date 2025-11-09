@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GoogleMapsCoreMVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c43b1740627c433be3a859f82b3b5d119dc11fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b6e2d75730b0a6c92e36aa0e374496404274487e")]
 [assembly: System.Reflection.AssemblyProductAttribute("GoogleMapsCoreMVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GoogleMapsCoreMVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
